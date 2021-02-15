@@ -46,6 +46,19 @@ Venerdì: 17:00 - 20:00(palestra individuale) 20:00 - 21:30(campo)\n
 
 """)
 
+def contaIppo(update, context):
+    countIppo = 0
+
+def addCount(update, context, hash_table):
+    if update.message.text.lower() != 'ippo':
+	return
+    if search(hash_table, update.message.from.id) != None:
+        return
+   countIppo += 1
+   insert(hash_table, update.message.from.id, update.message.from.first_name)
+  
+
+    
 def help(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text("""\
@@ -66,6 +79,14 @@ def error(update, context):
 def buongiornoDido(context: CallbackContext):
     context.bot.send_message(chat_id=UserId, 
                              text='Buongiorno,potrei essere in ritardo, luzi 9.15...')
+
+def insert(item_list, key, value):
+    item_list.append((key, value))
+ 
+def search(item_list, key):
+    for item in item_list:
+        if item[0] == key:
+            return item[1]
 #def countAndVote(update, context):
  #   if !search(update.message.from.first_name):
 #	add(update.message.from.first_name)
@@ -80,7 +101,9 @@ def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
+    hash_table = [[] for _ in range(12)]
     updater = Updater(TOKEN, use_context=True)
+
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -90,6 +113,8 @@ def main():
     dp.add_handler(CommandHandler("seriea", seriea))
     dp.add_handler(CommandHandler("seriec", seriec))
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("contaippo", contaIppo(hash_table)))
+    dp.add_handler(MessageHandler(Filters.text, addCount))
     # on noncommand i.e message - echo the message on Telegram
     #dp.add_handler(MessageHandler(Filters.text, countAndVote))
     job.run_once(buongiornoDido, time(11,3,0))
@@ -109,4 +134,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
