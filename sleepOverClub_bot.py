@@ -57,6 +57,3 @@ Venerdì: 17:00 - 20:00(palestra indivisuale) 20:00 - 21:30(campo)\n
 bot.polling()
 
 
-
-
-
